@@ -17,6 +17,8 @@
         document.getElementById('scriptForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const input = document.getElementById('inputField').value;
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = ''; // Clear previous output
 
             const response = await fetch('/execute', {
                 method: 'POST',
@@ -24,8 +26,20 @@
                 body: JSON.stringify({ input }),
             });
 
-            const output = await response.text();
-            document.getElementById('output').textContent = output;
+            if (!response.body) {
+                outputElement.textContent = 'No response received.';
+                return;
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let done = false;
+
+            while (!done) {
+                const { value, done: readerDone } = await reader.read();
+                done = readerDone;
+                outputElement.textContent += decoder.decode(value);
+            }
         });
     </script>
 </body>
