@@ -2,7 +2,7 @@
 
 UPDATE_SERVICE_NAME="update-service"
 FOUNDRY_SERVICE_NAME="foundry-service"
-TARGET_DIR="/home/foundryvtt/resources/app"
+TARGET_DIR="/home/foundryvtt"
 SOURCE_DIR="/app"
 
 # Ensure the target directory exists
