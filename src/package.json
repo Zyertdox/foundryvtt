@@ -1,7 +1,7 @@
 {
-    "name": "script-runner",
-    "version": "1.0.0",
-    "description": "Node app to run shell scripts",
+    "name": "foundryvtt-server",
+    "version": "12.0.0",
+    "description": "Updater and runner for Foundryvtt server",
     "main": "main.js",
     "scripts": {
         "start": "node main.js"
