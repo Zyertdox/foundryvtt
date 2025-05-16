@@ -1,6 +1,6 @@
 {
     "name": "foundryvtt-server",
-    "version": "12.0.0",
+    "version": "13.0.0",
     "description": "Updater and runner for Foundryvtt server",
     "main": "main.js",
     "scripts": {

@@ -8,7 +8,7 @@ module.exports = {
         },
         {
             name: "foundry-service",
-            script: "/home/foundryvtt/resources/app/main.js",
+            script: "/home/foundryvtt/main.js",
             args: "--dataPath=/home/foundrydata",
             watch: false,
         },

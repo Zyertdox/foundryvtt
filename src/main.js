@@ -1,5 +1,5 @@
 import express from 'express';
-import { spawn } from 'child_process';
+import {spawn} from 'child_process';
 
 const app = express();
 
@@ -17,7 +17,7 @@ process.argv.forEach(arg => {
 
 // Middleware for parsing JSON
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 app.get('/', (_, res) => {
     const htmlContent = `
@@ -34,14 +34,14 @@ app.get('/', (_, res) => {
         <input type="text" id="inputField" placeholder="Enter input" required />
         <button type="submit">Execute</button>
     </form>
-    <pre id="output"></pre>
+    <pre id="output" style="overflow-y: auto; padding: 1em;"></pre>
 
     <script>
         document.getElementById('scriptForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const input = document.getElementById('inputField').value;
             const outputElement = document.getElementById('output');
-            outputElement.textContent = ''; // Clear previous output
+            outputElement.textContent = '';
 
             const response = await fetch('/execute', {
                 method: 'POST',
@@ -57,17 +57,34 @@ app.get('/', (_, res) => {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let done = false;
+			let buffer = '';
             let previous = '';
+			
+			const flushInterval = 200;
+			
+			const flush = () => {
+				if (buffer) {
+					outputElement.textContent += buffer;
+					buffer = '';
+
+					outputElement.scrollTop = outputElement.scrollHeight;
+				}
+			};
+			
+			const intervalId = setInterval(flush, flushInterval);
 
             while (!done) {
-                const { value, done: readerDone } = await reader.read();
-                done = readerDone;
+                const { value, done } = await reader.read();
+				
                 let decoded = decoder.decode(value);
                 if(previous !== decoded){
-                    outputElement.textContent += decoder.decode(value);
+                    buffer += decoded;
                     previous = decoded;
                 }
             }
+			
+			clearInterval(intervalId);
+			flush();
         });
     </script>
 </body>
